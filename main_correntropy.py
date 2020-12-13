@@ -1,12 +1,8 @@
-"""
-Traffic Flow Prediction with Neural Networks(SAEs、LSTM、GRU).
-"""
 import os
 import math
 import warnings
 import numpy as np
 import pandas as pd
-from algorithm.random_walk import RW
 from data.data import process_data
 from keras.models import load_model
 from keras.utils.vis_utils import plot_model
@@ -17,7 +13,7 @@ import matplotlib.pyplot as plt
 from keras.utils.generic_utils import get_custom_objects
 from correntropy.correntropy import correntropy
 loss = correntropy
-get_custom_objects().update({"correntropy": loss})  #解决BUG：Unknown loss function:correntropy
+get_custom_objects().update({"correntropy": loss})  
 
 warnings.filterwarnings("ignore")
 
@@ -64,14 +60,7 @@ def eva_regress(dataset, name, y_true, y_pred):
     print(s1)
     print(s2)
     print(s3)
-    print('\n------------------')
-    with open(r'C:\Users\illum\Desktop\result.txt', 'a+') as res:
-        res.writelines(s1 + '\n')
-        res.writelines(s2 + '\n')
-        res.writelines(s3 + '\n')
-        res.writelines('\n------------------' + '\n')
-    
-
+    print('\n------------------')  
 
 def plot_results(y_true, y_preds, names):
     """Plot
@@ -105,17 +94,10 @@ def plot_results(y_true, y_preds, names):
 
 
 def main(dataset, lag):
-    PATH1 = r"C:\Users\illum\Downloads\model\lag=" + str(lag) + r'_corr_com'  #模型存储路径
-    #PATH1 = r"C:\Users\illum\Downloads\model\Bignetwork\lag=48" + r'_corr\sigma=' + str(sigma)  #模型存储路径
-    PATH2 = r"D:\DataSet" #数据集地址
-    DATASET = dataset    #数据集名称
-    FILE1 = PATH2 + os.sep + "train" + os.sep + DATASET  #训练集path
-    FILE2 = PATH2 + os.sep + "test" + os.sep + DATASET   #测试集path
-
-    tcn_lstm = load_model(PATH1 + os.sep + DATASET.split(".")[0] + 'tcnlstmcorr.h5')
+    tcclstmlsm = load_model('tcclstmlsm.h5')
     
-    models = [tcn_lstm]
-    names = ['TC-cimLSTM']
+    models = [tcclstmlsm]
+    names = ['TCC-LSTM-LSM']
 
     _, _, X_test, y_test, scaler = process_data(FILE1, FILE2, lag)
     y_test = scaler.inverse_transform(y_test)
@@ -132,20 +114,3 @@ def main(dataset, lag):
 
 
     #plot_results(y_test[: 288], y_preds, names)
-
-
-
-lag = 48
-names1 = ['1108299.csv', '1108380.csv', '1108439.csv', '1108599.csv', '1114254.csv', '1117857.csv']
-names2 = ['es088d_10min.csv', 'es645d_10min.csv', 'es708d_10min.csv', 'es855d_10min.csv']
-op = ['es088d_10min.csv']
-
-for name in names2:
-    main(name, lag)
-
-for name in names1:
-    main(name, lag)
-
-#for name in names1:
-#    main(name, lag)
-

@@ -28,18 +28,6 @@ def channel_normalization(x):
 
 
 def wave_net_activation(x):
-    #TODO:but what is waveNet?
-    # type: (Layer) -> Layer
-    """This method defines the activation used for WaveNet
-
-    described in https://deepmind.com/blog/wavenet-generative-model-raw-audio/
-
-    Args:
-        x: The layer we want to apply the activation to
-
-    Returns:
-        A new layer with the wavenet activation applied
-    """
     tanh_out = Activation('tanh')(x)
     sigm_out = Activation('sigmoid')(x)
     return keras.layers.multiply([tanh_out, sigm_out])
@@ -231,9 +219,6 @@ def compiled_tcn(num_feat,  # type: int
         print(f'model.y = {output_layer.shape}')
         model = Model(input_layer, output_layer)
 
-        # https://github.com/keras-team/keras/pull/11373
-        # It's now in Keras@master but still not available with pip.
-        # TODO To remove later.
         def accuracy(y_true, y_pred):
             # reshape in case it's in shape (num_samples, 1) instead of (num_samples,)
             if K.ndim(y_true) == K.ndim(y_pred):
